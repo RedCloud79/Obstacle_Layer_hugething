@@ -1,6 +1,7 @@
 import rospy
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from sensor_msgs.msg import Imu
 from geometry_msgs.msg import PoseStamped
 import time
 import math
@@ -18,6 +19,10 @@ def robot_pose_callback(msg):
     global current_x, current_y
     current_x = msg.pose.position.x
     current_y = msg.pose.position.y
+
+def robot_speed_callback(msg):
+    """로봇 이동속도 추출 업데이트"""
+    global 
 
 def estimate_travel_time(distance, speed=0.5):
     """이동 거리와 속도를 기반으로 예상 이동 시간 계산"""
@@ -75,6 +80,7 @@ def send_goal(goal_x, goal_y):
 # ROS 노드 실행
 rospy.init_node("goal_progress_checker")
 rospy.Subscriber("/robot_pose", PoseStamped, robot_pose_callback)
+rospy.Subscriber("/imu/data", Imu, robot_speed_callback)
 
 goal_x, goal_y = 5, 3  # YAML에서 가져온 목표 값 예제
 if not send_goal(goal_x, goal_y):
