@@ -6,14 +6,19 @@ import math
 class PathLengthCalculator:
     def __init__(self):
         self.path_length = 0.0
+        self.pos_path_global = Path()
 
         # 경로 구독
         self.path_sub = rospy.Subscriber("/move_base/GlobalPlanner/plan", Path, self.path_callback)
 
+    def global_pth_cb(self, msg):
+        self.pos_path_global = msg
+        self.pos_path_global = Path()
+
     def path_callback(self, path):
         # 경로 점들(Pose) 간의 거리 계산
         total_length = 0.0
-        for i in range(1, len(path.poses)):
+        for i in range(1, len(self.pos_path_global.poses)):
             p1 = path.poses[i-1].pose.position
             p2 = path.poses[i].pose.position
 
